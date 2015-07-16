@@ -1,0 +1,230 @@
+#! C:/Program Files/Nuke8.0v5/nuke-8.0.v5.dll -nx
+version 8.0 v5
+define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
+<layout version="1.0">
+    <window x="-4" y="-4" w="1928" h="1044" screen="0">
+        <splitter orientation="1">
+            <split size="1214"/>
+            <splitter orientation="1">
+                <split size="46"/>
+                <dock id="" hideTitles="1" activePageId="Toolbar.1">
+                    <page id="Toolbar.1"/>
+                </dock>
+                <split size="1164"/>
+                <splitter orientation="2">
+                    <split size="992"/>
+                    <dock id="" activePageId="Viewer.1">
+                        <page id="Viewer.1"/>
+                    </dock>
+                </splitter>
+            </splitter>
+            <split size="702"/>
+            <splitter orientation="2">
+                <split size="992"/>
+                <dock id="" activePageId="DAG.1">
+                    <page id="DAG.1"/>
+                </dock>
+            </splitter>
+        </splitter>
+    </window>
+</layout>
+}
+Root {
+ inputs 0
+ name Z:/Groupes-cours/NAND151-A14-N01/Partage/Conception-Film_CG-TH-MR/_New_pipeline/_assets/scripts/plates/plate.nk
+ format "1920 1080 0 0 1920 1080 1 HD"
+ proxy_type scale
+ proxy_format "1024 778 0 0 1024 778 1 1K_Super_35(full-ap)"
+ addUserKnob {20 mariTab l Mari}
+ addUserKnob {26 cmdStatus l "listen status" t "The status of Nuke's command port" T <b>Disabled</b>}
+ addUserKnob {26 sendStatus l "send status" t "The status of Nuke's connection to Mari" T <b>Inactive</b>}
+ addUserKnob {3 socketPort l "nuke command port" t "Port to listen on. Make sure this matches the command port set in Mari's \"Nuke\" Palette."}
+ socketPort 50107
+ addUserKnob {6 enableSocket l enabled -STARTLINE}
+ addUserKnob {26 divider l "" +STARTLINE}
+ addUserKnob {20 advanced n 1}
+ advanced 0
+ addUserKnob {3 portRange l "port range" t "If the main specified command port is unavailable, Nuke will try using the next port number, and continue until successful or the indicated number of ports have been tried."}
+ portRange 200
+ addUserKnob {4 enablePortRange l "" t "Indicates whether to use a range of ports up to the given number, or to use only the single one specified." -STARTLINE M {"use range" "single port only"}}
+ addUserKnob {6 localhostOnly l "local host only" t "This determines whether the Mari bridge server will listen for connections from any machine, or from \"localhost\" (the local machine) only.<p>Only allowing connections from localhost is more secure, but will prevent you from using the Nuke&lt;&gt;Mari workflow across the network." +STARTLINE}
+ addUserKnob {1 hostName l "mari host" t "The machine name or IP address that Mari is running on.\nLeave empty if both Mari and Nuke are running on the same machine."}
+ hostName localhost
+ addUserKnob {3 socketPortSend l port t "Port that Mari is listening to. Make sure this matches the command port set in Mari's preferences." -STARTLINE}
+ socketPortSend 6100
+ addUserKnob {2 mariDataDir l "mari data dir" t "Path to directory that will hold transient data to be sent to Mari (exrs, objs and fbx files). If this is left empty, a \"mari\" directory will be created in the nk file's location"}
+ mariDataDir "\[getenv NUKE_TEMP_DIR]/mariData"
+ addUserKnob {2 mariLocation l "mari launch path" t "The path to launch Mari from.<br>This can also be set using the <b>MARI_INSTALL_PATH</b> environment variable."}
+ addUserKnob {20 endGroup n -1}
+}
+Read {
+ inputs 0
+ file Z:/Groupes-cours/NAND151-A14-N01/Partage/Conception-Film_CG-TH-MR/03-RENDERS/03-MODELING/pont_DONE/pont/pont.0001.exr
+ format "1280 720 0 0 1280 720 1 HDV "
+ origset true
+ name Read
+ xpos -251
+ ypos -276
+}
+Group {
+ name BurnText
+ xpos -251
+ ypos -165
+ addUserKnob {20 BurnText}
+ addUserKnob {26 info l Info T "Add +100 in h to have a banner."}
+ addUserKnob {15 Format}
+ Format {0 0 {root.format.r} {root.format.h}}
+ addUserKnob {1 Topright l "Top right"}
+ Topright Change
+ addUserKnob {1 Bottomleft l "Bottom left"}
+ Bottomleft Nom
+ addUserKnob {1 Bottomcenter l "Bottom center"}
+ Bottomcenter Projet
+ addUserKnob {1 Bottomright l "Bottom right"}
+ Bottomright Date
+ addUserKnob {20 chooseelements l "Choose burn in elements" n 1}
+ chooseelements 0
+ addUserKnob {41 disable_1 l "disable frame" T Frame.disable}
+ addUserKnob {41 disable_2 l "disable shot name" T ShotName.disable}
+ addUserKnob {41 disable_5 l "disable top right" T TopRight.disable}
+ addUserKnob {41 disable_6 l "disable bottom left" T BottomLeft.disable}
+ addUserKnob {41 disable_3 l "disable bottom center" T BottomCenter.disable}
+ addUserKnob {41 disable_4 l "disable bottom right" T BottomRight.disable}
+ addUserKnob {20 endGroup n -1}
+ addUserKnob {20 Font n 1}
+ Font 0
+ addUserKnob {2 font}
+ font C:/Windows/Fonts/arial.ttf
+ addUserKnob {16 size}
+ size 40
+ addUserKnob {20 endGroup_1 l endGroup n -1}
+ addUserKnob {20 color l Color}
+ addUserKnob {18 rgb l RGB}
+ rgb 1
+ addUserKnob {6 rgb_panelDropped l "panel dropped state" -STARTLINE +HIDDEN}
+}
+ Input {
+  inputs 0
+  name Input1
+  xpos 384
+  ypos -200
+ }
+ Reformat {
+  type "to box"
+  box_width {{parent.Format.r}}
+  box_height {{parent.Format.t}}
+  box_fixed true
+  black_outside true
+  name Reformat1
+  xpos 384
+  ypos -112
+ }
+ Text {
+  font "\[value parent.font]"
+  size {{parent.size}}
+  yjustify top
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {5 -5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name Frame
+  xpos 384
+  ypos -22
+ }
+ Text {
+  message "\[file rootname \[file tail \[value root.name] ] ]"
+  font "\[value parent.font]"
+  size {{parent.size}}
+  xjustify center
+  yjustify top
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {0 -5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name ShotName
+  xpos 384
+  ypos 4
+ }
+ Text {
+  message "\[value parent.Topright]"
+  font "\[value parent.font]"
+  size {{parent.size}}
+  xjustify right
+  yjustify top
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {-5 -5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name TopRight
+  xpos 384
+  ypos 30
+ }
+ Text {
+  message "\[value parent.Bottomleft]"
+  font "\[value parent.font]"
+  size {{parent.size}}
+  yjustify bottom
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {5 5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name BottomLeft
+  xpos 384
+  ypos 56
+ }
+ Text {
+  message "\[value parent.Bottomcenter]"
+  font "\[value parent.font]"
+  size {{parent.size}}
+  xjustify center
+  yjustify bottom
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {0 5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name BottomCenter
+  xpos 384
+  ypos 82
+ }
+ Text {
+  message "\[value parent.Bottomright]"
+  font "\[value parent.font]"
+  size {{parent.size}}
+  xjustify right
+  yjustify bottom
+  Transform 1
+  box {{curve} {curve} {parent.Format.r} {parent.Format.t}}
+  translate {-5 5}
+  center {1150 514}
+  color {{parent.rgb}}
+  name BottomRight
+  xpos 384
+  ypos 108
+ }
+ Output {
+  name Output1
+  xpos 384
+  ypos 284
+ }
+end_group
+Write {
+ file Z:/Groupes-cours/NAND151-A14-N01/Partage/Conception-Film_CG-TH-MR/01-WORKING-FILES/test.%04d.jpg
+ file_type jpeg
+ _jpeg_quality 1
+ checkHashOnRead false
+ name Write
+ xpos -251
+ ypos -113
+}
+Viewer {
+ frame 1
+ input_process false
+ name Viewer1
+ xpos -249
+ ypos -39
+}

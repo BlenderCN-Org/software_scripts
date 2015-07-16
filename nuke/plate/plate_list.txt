@@ -1,0 +1,3 @@
+# Mettre la liste des dossiers comprenant les séquences d'images à transformer en plate.
+Z:\Groupes-cours\NAND151-A14-N01\Partage\Conception-Film_CG-TH-MR\03-RENDERS\03-MODELING\aigle_turntable_DONE\aigle*turntable
+Z:\Groupes-cours\NAND151-A14-N01\Partage\Conception-Film_CG-TH-MR\03-RENDERS\03-MODELING\batiment_mine_DONE\batiment_mine
