@@ -24,27 +24,37 @@ def export_manager():
 
 	#Fonction pour bouton Select all --- All Checkbox == 1
 	def select_all():
-		for i in checkbox_liste:
-			i.setChecked(1)
+		for key, value in checkbox_dict.items():
+			key.setChecked(1) #1 = Checked
+
 
 	#Fonction pour bouton Select none --- All Checkbox == 0
 	def select_none():
-		for i in checkbox_liste:
-			i.setChecked(0)
+		for key, value in checkbox_dict.items():
+			key.setChecked(0) #0 = Not Checked
 
 	#Export All maps peu importe les Checkbox
 	def export_all_fc(): 
-		print "EXPORTING THESE MAPS"
+		print "EXPORTING THESE MAPS(ALL)"
 		for obj in geo_list:
 			mari.geo.setCurrent(obj)
 			channelList = obj.channelList()
 			for chan in channelList:
-				# chan.exportImagesFlattened("C:\\Users\\Rodrigue\\Desktop\\Script\\Mari\\Test\\nat_feu_0010_$CHANNEL_$ENTITY_$UDIM.png")
-				print chan	
+				print chan
+				chan.exportImagesFlattened(path_export + nomenclature)
 
 	#Export SELECTED maps selon les Checkbox
 	def export_selected_fc():
-		print checkbox_dict
+		print "EXPORTING THESE MAPS(SELECTED)"
+		for key in checkbox_dict.keys():
+			if key.checkState() == 2:
+				chan =  checkbox_dict[key]
+				print chan
+				chan.exportImagesFlattened(path_export + nomenclature)
+				# object = "Cube"
+				# channel = "Diffuse"
+				# geo_dict = {"Cube":objet cube}
+
 
 
 
@@ -53,6 +63,8 @@ def export_manager():
 	#Variables necessaires
 	dlg = gui.QDialog()
 	geo_list = mari.geo.list()
+	path_export = "H:\\tmp\\"
+	nomenclature = "nat_feu_0010_$CHANNEL_$ENTITY_$UDIM.png"
 
 	#Construire la fenetre et le layout de base
 	main_layout = gui.QHBoxLayout()
@@ -76,7 +88,6 @@ def export_manager():
 
 
 
-
 	#Channel Header, Label et Widgets
 	channel_label = gui.QLabel("<strong>Channels To Export</strong>")
 	channel_layout = gui.QVBoxLayout()
@@ -90,51 +101,37 @@ def export_manager():
 	top_group_layout.addLayout(channel_layout)
 
 	#-----------------------------BUTTON & WIDGETS---------------------------------
+
 	#Repopulate the earth
 	chan_dict = {}
 	checkbox_dict = {}
 	checkbox_liste = []
-
 
 	checkbox_group = gui.QGroupBox()
 	checkbox_group_layout = gui.QVBoxLayout()
 	checkbox_group.setLayout(checkbox_group_layout)
 	top_group_layout.addWidget(checkbox_group)
 
-	#Query
-	for geo in geo_list:
-		ma_liste = []
-		for channel in geo.channelList():
-			ma_liste.append(channel.name())
-		chan_dict[str(geo.name())] = ma_liste
+	#Label & Checkbox builder
+	geo_dict = {}
+	for geo in geo_list: # Iterating over each object (geo = Cube, Sphere, Torus)
 
-	#Widget Building
-	for i in geo_list:
-		obj_label = gui.QLabel(str(i.name()))
+		obj_label = gui.QLabel(str(geo.name()))
 		checkbox_group_layout.addWidget(obj_label)
-		
-		channels = chan_dict[str(i.name())]
 
-		for chan in channels:
-			checkbox_chan = gui.QCheckBox(str(chan))
-			checkbox_dict[chan] = str(checkbox_chan)
-			checkbox_group_layout.addWidget(checkbox_chan)
-			checkbox_liste.append(checkbox_chan)
-			print checkbox_dict
+		for channel in geo.channelList(): # Iterating over each channel (channel = Diffuse, Spec, Bump...)
+			checkbox = gui.QCheckBox(str(channel.name()))
+			checkbox_group_layout.addWidget(checkbox)
+			checkbox_dict[checkbox] = channel
 
 
-	
 	#Path Layout
 	path_layout = gui.QHBoxLayout()
 
-    #Get mari default path and template
-    path = os.path.abspath(mari.resources.path(mari.resources.DEFAULT_EXPORT))
-    template = mari.resources.sequenceTemplate()
-    export_path_template = os.path.join(path, template)
-
     #Ajouter un label, bouton et text field pour le path
-    path_label = gui.QLabel('Path:')
-    path_line_edit = gui.QLineEdit()
+	path_label = gui.QLabel('Path:')	#Label avant le lineEdit
+    path_line_edit = gui.QLineEdit(path_export)	#Texte sur la ligne
+	path_line_edit.setReadOnly(1)	#Read Only mode, can select can't change
     path_pixmap = gui.QPixmap(mari.resources.path(mari.resources.ICONS) + '/ExportImages.png')
     icon = gui.QIcon(path_pixmap)
     path_button = gui.QPushButton(icon, "")
@@ -155,8 +152,8 @@ def export_manager():
 	top_group_layout.addWidget(sel_all)
 	top_group_layout.addWidget(sel_none)
 
-	sel_all.connect("clicked()", select_all)
-	sel_none.connect("clicked()", select_none)
+	sel_all.connect("clicked()", select_all)	#Connect button to fonction
+	sel_none.connect("clicked()", select_none)	#Connect button to fonction
 
 
     #Export All & Export Button
@@ -165,14 +162,15 @@ def export_manager():
     bottom_group_layout.addWidget(export_all)
     bottom_group_layout.addWidget(export_selected)
 	
-	export_all.connect("clicked()", export_all_fc)
-	export_selected.connect("clicked()", export_all_fc)
+	export_all.connect("clicked()", export_all_fc)	#Connect button to fonction
+	export_selected.connect("clicked()", export_selected_fc)	#Connect button to fonction
 
     #Close button
     close_btn = gui.QPushButton("Close")
     close_layout.addWidget(close_btn)
     main_layout.addLayout(close_layout, stretch = 1)
-    close_btn.connect("clicked()", dlg.reject)
+
+    close_btn.connect("clicked()", dlg.reject)	#Connect button to fonction
 
 	dlg.setLayout(main_layout)
 	dlg.setWindowTitle("Export Manager")
