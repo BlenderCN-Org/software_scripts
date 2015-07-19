@@ -23,9 +23,9 @@ class MariExporter(gui.QDialog):
 		self.channel_layout.setColumnMinimumWidth(1, 5)
 
 		# Middle Layout
-		mid_group = gui.QGroupBox(self)
-		mid_group_layout = gui.QVBoxLayout(self)
-		mid_group.setLayout(mid_group_layout)
+		self.mid_group = gui.QGroupBox(self)
+		self.mid_group_layout = gui.QVBoxLayout(self)
+		self.mid_group.setLayout(self.mid_group_layout)
 
 		# Close Layout
 		self.right_group = gui.QGroupBox(self)
@@ -34,11 +34,11 @@ class MariExporter(gui.QDialog):
 
 		# Add Layout to main
 		main_layout.addWidget(left_group)
-		main_layout.addWidget(mid_group)
+		main_layout.addWidget(self.mid_group)
 		main_layout.addWidget(self.right_group)
 
 		self.channel_builder()
-		self.bouton()
+		self.bouton_ui()
 
 
 	def channel_builder(self):
@@ -46,8 +46,8 @@ class MariExporter(gui.QDialog):
 
 		#-----------------------------Boring stuff (AKA VARIABLES ET FONCTIONS)-----------------
 
-		geo_list = mari.geo.list()
-		sel_obj = mari.geo.current()
+		self.geo_list = mari.geo.list()
+		self.sel_obj = mari.geo.current()
 		self.chk_dict = {}
 		self.chk_liste = []
 		diff_chk = gui.QCheckBox("Diffuse", self)
@@ -63,7 +63,7 @@ class MariExporter(gui.QDialog):
 		self.chk_liste = [diff_chk, bump_chk, disp_chk, spec_chk, norm_chk, roug_chk, refl_chk, refr_chk, fres_chk, mask_chk]
 		self.chk_liste_name = ["diff_chk", "bump_chk", "disp_chk", "spec_chk", "norm_chk", "roug_chk", "refl_chk", "refr_chk", "fres_chk", "mask_chk"]
 
-	def bouton(self):
+	def bouton_ui(self):
 		# Add Checkbox pour Map et Set to layout
 		self.add_chk()
 
@@ -81,6 +81,37 @@ class MariExporter(gui.QDialog):
 		self.right_group_layout.addWidget(close_btn)
 		close_btn.connect("clicked()", self.reject)
 		print self.chk_dict
+
+		#Build All
+		build_all = gui.QPushButton("Build All")	#Bouton Build All
+		self.build_all_same_size_chkbox = gui.QCheckBox("Use same size for all maps?")
+		self.build_all_size_combobox = gui.QComboBox()
+		self.build_all_groupbox = gui.QGroupBox(self)	#Création du cadre
+		self.build_all_layout = gui.QGridLayout(self)	#Layout du cadre
+		self.build_all_groupbox.setLayout(self.build_all_layout)	#Attribuer le layout au cadre
+
+		self.build_all_layout.addWidget(build_all)	#Ajouter le bouton au layout
+
+		self.build_all_layout.addWidget(self.build_all_same_size_chkbox)	#Ajouter le checkbox au layout
+
+		self.build_all_layout.addWidget(self.build_all_size_combobox)	#Ajouter la combobox au layout
+		self.build_all_size_combobox.insertItem(0, "1024", )	#Ajouter resolution 1024
+		self.build_all_size_combobox.insertItem(1, "2048", )	#Ajouter resolution 2048
+		self.build_all_size_combobox.insertItem(2, "4096", )	#Ajouter resolution 4096
+		self.build_all_size_combobox.insertItem(3, "8192", )	#Ajouter resolution 8192
+
+		self.mid_group_layout.addWidget(self.build_all_groupbox)	#Ajouter le cadre au Layout du milieu
+
+		if self.build_all_same_size_chkbox.isChecked() == 1:
+			self.build_all_size_combobox.setEnabled(0)
+		else:
+			self.build_all_size_combobox.setEnabled(1)
+
+		# build_all.connect("clicked()", self.)
+
+		#Build Selected
+		build_selected = gui.QPushButton("Build Selected")
+		self.mid_group_layout.addWidget(build_selected)
 
 	def add_chk(self):
 		'''Fonction pour créer les checkbox et les assigner'''
@@ -110,7 +141,9 @@ class MariExporter(gui.QDialog):
 
 	def check_state(self):
 		'''Fonction pour barrer les maps combobox'''
-		pass
+
+	# def build_all_fc(self):
+	# 	self.sel_obj.createChannel()
 
 
 
