@@ -10,13 +10,8 @@ class MariExporter(gui.QDialog):
 	def __init__(self):
 		super(MariExporter, self).__init__()
 
-
-
 		self.ui_variables()
-		self.build_all_same_size_chkbox.stateChanged.connect(self.check_build_all_checkbox_state)
-
-
-
+		# self.build_all_same_size_chkbox.stateChanged.connect(self.check_build_all_checkbox_state)
 
 	def ui_variables(self):
 		# -----------------------------Boring stuff (AKA VARIABLES ET FONCTIONS)-----------------
@@ -24,6 +19,7 @@ class MariExporter(gui.QDialog):
 		self.sel_obj = mari.geo.current()
 		self.chk_dict = {}
 		self.chk_liste = []
+		self.size_map = 2048
 		self.build_all_checkbox_value = 0
 		self.build_selected_checkbox_value = 0
 		diff_chk = gui.QCheckBox("Diffuse", self)
@@ -124,7 +120,7 @@ class MariExporter(gui.QDialog):
 		self.mid_group_layout.addWidget(self.build_all_groupbox)  # Ajouter le cadre au Layout du milieu
 
 
-		# build_all.connect("clicked()", self.)
+		build_all.connect("clicked()", self.build_all_fc)	#Connect bouton a fonction
 
 		# Build Selected
 		build_selected = gui.QPushButton("Build Selected")	#Bouton Build Selected
@@ -134,17 +130,19 @@ class MariExporter(gui.QDialog):
 		self.build_selected_layout = gui.QGridLayout(self)	#Layout du cadre
 		self.build_selected_groupbox.setLayout(self.build_selected_layout)	#Attribuer le layout au cadre
 
-		self.build_selected_layout.addWidget(build_selected)
+		self.build_selected_layout.addWidget(build_selected)	#Ajouter bouton au layout
 
-		self.build_selected_layout.addWidget(self.build_selected_same_size_chkbox)
+		self.build_selected_layout.addWidget(self.build_selected_same_size_chkbox)	#Ajouter checkbox au layout
 
-		self.build_selected_layout.addWidget(self.build_selected_size_combobox)
+		self.build_selected_layout.addWidget(self.build_selected_size_combobox)	#AJouter combobox au layout
 		self.build_selected_size_combobox.insertItem(0, "1024", )  # Ajouter resolution 1024
 		self.build_selected_size_combobox.insertItem(1, "2048", )  # Ajouter resolution 2048
 		self.build_selected_size_combobox.insertItem(2, "4096", )  # Ajouter resolution 4096
 		self.build_selected_size_combobox.insertItem(3, "8192", )  # Ajouter resolution 8192
 
-		self.mid_group_layout.addWidget(self.build_selected_groupbox)
+		self.mid_group_layout.addWidget(self.build_selected_groupbox)	#Ajouter le cadre au layout du milieu
+
+		build_selected.connect("clicked()", self.build_selected_fc)
 
 	def check_build_all_checkbox_state(self):
 		# if self.build_all_same_size_chkbox.checkState() == 0:
@@ -169,12 +167,23 @@ class MariExporter(gui.QDialog):
 		for checkbox in self.chk_liste:
 			checkbox.setChecked(0)
 
-
-
-
-	# def build_all_fc(self):
-	# 	self.sel_obj.createChannel()
-
+	def build_all_fc(self):
+		
+		if self.build_all_same_size_chkbox.checkState() == 0:
+			print "bite"
+		else:
+			self.sel_obj.createChannel("diff", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("bump", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("disp", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("spec", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("norm", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("roug", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("refl", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("refr", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("frnl", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("mask", self.size_map, self.size_map, 8)
+	def build_selected_fc(self):
+		print "molle"
 
 
 
