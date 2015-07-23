@@ -13,7 +13,7 @@ class MariExporter(gui.QDialog):
 
 
 		self.ui_variables()
-		# self.build_all_same_size_chkbox.stateChanged.connect(self.check_checkbox_state)
+		self.build_all_same_size_chkbox.stateChanged.connect(self.check_build_all_checkbox_state)
 
 
 
@@ -127,12 +127,35 @@ class MariExporter(gui.QDialog):
 		# build_all.connect("clicked()", self.)
 
 		# Build Selected
-		build_selected = gui.QPushButton("Build Selected")
-		self.mid_group_layout.addWidget(build_selected)
+		build_selected = gui.QPushButton("Build Selected")	#Bouton Build Selected
+		self.build_selected_same_size_chkbox = gui.QCheckBox("Use same size for all maps?")
+		self.build_selected_size_combobox = gui.QComboBox()
+		self.build_selected_groupbox = gui.QGroupBox(self)	#Creation du cadre
+		self.build_selected_layout = gui.QGridLayout(self)	#Layout du cadre
+		self.build_selected_groupbox.setLayout(self.build_selected_layout)	#Attribuer le layout au cadre
 
-	def check_checkbox_state(self):
-		if self.build_all_same_size_chkbox.checkState() == 0:
-			self.checkboxvalue = 0
+		self.build_selected_layout.addWidget(build_selected)
+
+		self.build_selected_layout.addWidget(self.build_selected_same_size_chkbox)
+
+		self.build_selected_layout.addWidget(self.build_selected_size_combobox)
+		self.build_selected_size_combobox.insertItem(0, "1024", )  # Ajouter resolution 1024
+		self.build_selected_size_combobox.insertItem(1, "2048", )  # Ajouter resolution 2048
+		self.build_selected_size_combobox.insertItem(2, "4096", )  # Ajouter resolution 4096
+		self.build_selected_size_combobox.insertItem(3, "8192", )  # Ajouter resolution 8192
+
+		self.mid_group_layout.addWidget(self.build_selected_groupbox)
+
+	def check_build_all_checkbox_state(self):
+		# if self.build_all_same_size_chkbox.checkState() == 0:
+		# 	self.checkboxvalue == 0
+		# else:
+		# 	self.checkboxvalue == 1
+		print "bite"
+
+	def check_build_selected_checkbox_state(self):
+		if self.build_selected_same_size_chkbox.checkState() == 0:
+			self.checkboxvalue == 0
 		else:
 			self.checkboxvalue == 1
 
