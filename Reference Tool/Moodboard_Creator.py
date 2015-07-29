@@ -18,8 +18,6 @@ class Moodboard_Creator():
             self.image_list.append(Image.open(self.dir + file))     #Rajouter dans la liste
         self.max_row = len(self.image_list)     # Le maximum de row est egal a la totalite des item dans la liste
         self.image_canevas = Image.new("RGB", ( 15000, 15000))  # Creation du canevas (Mode de couleur et grandeur)
-        self.second_row = (self.width_resize + 200)
-
         # --------------------------------------------------------------------------
 
 
@@ -27,32 +25,33 @@ class Moodboard_Creator():
 
     def resize_and_drop(self):
         self.list_image_numero = 0
-
         for row in range(self.max_row):     #Pour chaque row dans le maximum donne
-            try:                    #
-                y_top = y_bottom + self.vertical_spacing
-            except NameError:
-                y_top = self.vertical_spacing
+            self.first_row_list = []
 
-            try:
-                y_bottom = y_top + max(self.max_height_list)
-            except AttributeError:
-                y_bottom = self.second_row
-            except ValueError:
-                pass
+            for first_row_image in range(self.max_image_per_row):            #Trouver les grandeurs de la premiere row
+                self.first_row_image_temp = self.image_list[first_row_image]
+                wpercent = (self.width_resize / float(self.first_row_image_temp.size[0]))
+                hsize = int((float(self.first_row_image_temp.size[1]) * float(wpercent)))
+                self.first_row_list.append(hsize)
+            if self.list_image_numero < len(self.image_list):
 
-            try:
-                self.biggest_image_list.append(max(self.max_height_list))
-            except AttributeError:
-                pass
-            except ValueError:
+
+                if row == 0:
+                    y_top = self.vertical_spacing
+                    y_bottom = max(self.first_row_list) + self.vertical_spacing
+                else:
+                    y_top = y_bottom + self.vertical_spacing
+                    y_bottom = y_top + max(self.max_height_list)
+
+            else:
                 pass
 
             self.max_height_list = []       #Liste des images les plus grandes sur la ligne
 
-
             for image in range(self.max_image_per_row):     #Pour chaque image par row dans le maximum donne
-                try:
+
+                if self.list_image_numero < len(self.image_list):
+
                     if image == 0:      #si c'est l'image 0 sur la ligne, on retourne a la marge gauche
                         x_left = self.horizontal_spacing
                     else:
@@ -63,25 +62,28 @@ class Moodboard_Creator():
                     self.image = self.image_list[self.list_image_numero]       #Prendre image selon list_image si existe dans
                     self.list_image_numero = self.list_image_numero + 1         #+1 Pour pouvoir passer a travers les images
 
+
                     wpercent = (self.width_resize / float(self.image.size[0]))
                     hsize = int((float(self.image.size[1]) * float(wpercent)))
                     self.resized_image = self.image.resize((self.width_resize, hsize),Image.ANTIALIAS)  # Resize image a resized_image
 
                     self.max_height_list.append(self.resized_image.size[1])     #Append la hauteur de chaque image a la liste
 
-
                     self.image_canevas.paste(self.resized_image, (x_left, y_top))       #Paste image a canevas
 
-
-
-
-                except IndexError:          #Si liste_image_numero depasse items dans liste_image
+                else:          #Si liste_image_numero depasse items dans liste_image
                     pass
 
-        self.canevas_resize_horizontal = ( ( (self.horizontal_spacing * self.max_image_per_row) + self.horizontal_spacing ) + self.max_image_per_row * self.width_resize )
-        self.canevas_resize_vertical = ( (self.vertical_spacing * 5) + sum(self.biggest_image_list) + 200 )
-        self.cropped_canvas = self.image_canevas.crop((0, 0, self.canevas_resize_horizontal, self.canevas_resize_vertical))     #Canevas Cropped
 
+            try:
+                self.biggest_image_list.append(max(self.max_height_list))
+            except ValueError:
+                pass
+
+        self.canevas_resize_horizontal = ( ( (self.horizontal_spacing * self.max_image_per_row) + self.horizontal_spacing ) + self.max_image_per_row * self.width_resize )
+        self.canevas_resize_vertical = ( (self.vertical_spacing * 4) + sum(self.biggest_image_list) )
+        self.cropped_canvas = self.image_canevas.crop((0, 0, self.canevas_resize_horizontal, self.canevas_resize_vertical))     #Canevas Cropped
+        self.cropped_canvas.show()
         self.cropped_canvas.save(self.dir + "Moodboard.jpg")
 
 Moodboard_Creator()
