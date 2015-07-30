@@ -27,7 +27,10 @@ class Moodboard_Creator():
         self.list_image_numero = 0
         for row in range(self.max_row):     #Pour chaque row dans le maximum donne
             self.first_row_list = []
-
+            if len(self.image_list) < self.max_image_per_row:
+                self.max_image_per_row = len(self.image_list)
+            else:
+                pass
             for first_row_image in range(self.max_image_per_row):            #Trouver les grandeurs de la premiere row
                 self.first_row_image_temp = self.image_list[first_row_image]
                 wpercent = (self.width_resize / float(self.first_row_image_temp.size[0]))
