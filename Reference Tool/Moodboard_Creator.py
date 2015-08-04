@@ -80,6 +80,7 @@ class Moodboard_Creator():
             except ValueError:
                 pass
 
+
         self.canevas_resize_horizontal = ( ( (self.horizontal_spacing * self.max_image_per_row) + self.horizontal_spacing ) + self.max_image_per_row * self.width_resize )
         self.canevas_resize_vertical = ( (self.vertical_spacing * 4) + sum(self.biggest_image_list) )
         self.cropped_canvas = self.image_canevas.crop((0, 0, self.canevas_resize_horizontal, self.canevas_resize_vertical))     #Canevas Cropped
