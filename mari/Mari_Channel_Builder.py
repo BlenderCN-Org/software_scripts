@@ -6,9 +6,9 @@ import PythonQt.QtCore as core
 import sys
 
 
-class MariExporter(gui.QDialog):
+class MariChannelBuilder(gui.QDialog):
 	def __init__(self):
-		super(MariExporter, self).__init__()
+		super(MariChannelBuilder, self).__init__()
 
 		self.ui_variables()
 
@@ -369,7 +369,7 @@ class MariExporter(gui.QDialog):
 
 
 
-MainWindow = MariExporter()
+MainWindow = MariChannelBuilder()
 MainWindow.show()
 
 
