@@ -1,28 +1,29 @@
 import os
 import shutil
-import os.path
-
-
-
-
+import mari
+import subprocess
 class Cache_Push():
-    def __init__(self):
-        self.path_to_cache = "H:\\Cache_2\\"        #Path to Source (Mari cache)
-        self.check_last_used()
-        self.push_folder()
 
-    def check_last_used(self):
-        self.last_used_directory = max([os.path.join(self.path_to_cache, d) for d in os.listdir(self.path_to_cache)], key=os.path.getmtime)
-        self.last_used_directory_name = self.last_used_directory.split("\\")[-1]        #Get Cache folder name (longue string)
+    def __init__(self):
+        # self.push_folder()
+        self.mari_history_remover()
+
+    def mari_history_remover(self):
+        self.path_to_mari = "C:\\Program Files\\Mari2.6v2\\Bundle\\bin\\Mari2.6v2.exe"
+
+        subprocess.Popen([self.path_to_mari, -t, ])
+
+
+
 
     def push_folder(self):
-        destination_folder = "Z:\\Groupes-cours\\NAND999-A15-N01\\Nature\\tex"
-        destPath = destination_folder + "\\"+ self.last_used_directory_name
+        sourcePath = r'H:\test'
+        destPath = r'H:\.mari'
 
-        for root, dirs, files in os.walk(self.last_used_directory):
+        for root, dirs, files in os.walk(sourcePath):
 
             #destination PATH
-            dest = destPath + root.replace(self.last_used_directory, '')
+            dest = destPath + root.replace(sourcePath, '')
 
             #creer des directory si existe pas
             if not os.path.isdir(dest):

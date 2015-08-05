@@ -19,7 +19,7 @@ class MariExporter(gui.QDialog):
 		self.sel_obj = mari.geo.current()
 		self.chk_dict = {}
 		self.chk_liste = []
-		self.maps_combobox_list = []
+		self.size_map = 2048
 		self.build_all_checkbox_value = 0
 		self.build_selected_checkbox_value = 0
 		diff_chk = gui.QCheckBox("Diffuse", self)
@@ -83,7 +83,6 @@ class MariExporter(gui.QDialog):
 			temp_name = self.chk_liste_name[temp]
 			temp = temp + 1
 			self.chk_dict[temp_name] = self.size_for_map
-			self.maps_combobox_list.append(self.size_for_map)
 
 		# Select All & Select None
 		sel_all = gui.QPushButton("Select All")
@@ -169,69 +168,22 @@ class MariExporter(gui.QDialog):
 			checkbox.setChecked(0)
 
 	def build_all_fc(self):
-		"""Fonction pour créer l'entierete des maps"""
+		
 		if self.build_all_same_size_chkbox.checkState() == 0:
-			"""Diffuse"""
-			self.build_all_diff_size = self.maps_combobox_list[0].currentText
-			self.sel_obj.createChannel("diff", int(self.build_all_diff_size), int(self.build_all_diff_size), 8)
-
-			"""Bump"""
-			self.build_all_bump_size = self.maps_combobox_list[1].currentText
-			self.sel_obj.createChannel("bump", int(self.build_all_bump_size), int(self.build_all_bump_size), 8)
-
-			"""Displacement"""
-			self.build_all_disp_size = self.maps_combobox_list[2].currentText
-			self.sel_obj.createChannel("disp", int(self.build_all_disp_size), int(self.build_all_disp_size), 8)
-
-			"""Specular"""
-			self.build_all_spec_size = self.maps_combobox_list[3].currentText
-			self.sel_obj.createChannel("spec", int(self.build_all_spec_size), int(self.build_all_spec_size), 8)
-
-			"""Normal"""
-			self.build_all_norm_size = self.maps_combobox_list[4].currentText
-			self.sel_obj.createChannel("norm", int(self.build_all_norm_size), int(self.build_all_norm_size), 8)
-
-			"""Roughness"""
-			self.build_all_roug_size = self.maps_combobox_list[5].currentText
-			self.sel_obj.createChannel("roug", int(self.build_all_roug_size), int(self.build_all_roug_size), 8)
-
-			"""Reflection"""
-			self.build_all_refl_size = self.maps_combobox_list[6].currentText
-			self.sel_obj.createChannel("refl", int(self.build_all_refl_size), int(self.build_all_refl_size), 8)
-
-			"""Refraction"""
-			self.build_all_refr_size = self.maps_combobox_list[7].currentText
-			self.sel_obj.createChannel("refr", int(self.build_all_refr_size), int(self.build_all_refr_size), 8)
-
-			"""Fresnel"""
-			self.build_all_frnl_size = self.maps_combobox_list[8].currentText
-			self.sel_obj.createChannel("frnl", int(self.build_all_frnl_size), int(self.build_all_frnl_size), 8)
-
-			"""Mask"""
-			self.build_all_mask_size = self.maps_combobox_list[9].currentText
-			self.sel_obj.createChannel("mask", int(self.build_all_mask_size), int(self.build_all_mask_size), 8)
-
-
+			print "bite"
 		else:
-			self.build_all_same_size = int(self.build_all_size_combobox.currentText)
-			self.sel_obj.createChannel("diff", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("bump", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("disp", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("spec", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("norm", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("roug", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("refl", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("refr", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("frnl", self.build_all_same_size, self.build_all_same_size, 8)
-			self.sel_obj.createChannel("mask", self.build_all_same_size, self.build_all_same_size, 8)
-
+			self.sel_obj.createChannel("diff", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("bump", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("disp", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("spec", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("norm", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("roug", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("refl", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("refr", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("frnl", self.size_map, self.size_map, 8)
+			self.sel_obj.createChannel("mask", self.size_map, self.size_map, 8)
 	def build_selected_fc(self):
-		"""Fonction pour crer les maps selectionner seulement"""
-		if self.build_selected_same_size_chkbox.checkState() == 0:
-			print "ayoye"
-		else:
-			self.build_selected_same_size = int(self.build_selected_size_combobox.currentText)
-
+		print "molle"
 
 
 
