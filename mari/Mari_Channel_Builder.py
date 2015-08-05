@@ -367,21 +367,5 @@ class MariChannelBuilder(gui.QDialog):
 			else:
 				pass
 
-
-
 MainWindow = MariChannelBuilder()
 MainWindow.show()
-
-
-
-
-# colr	Diffuse color
-# bump	Bump
-# disp	Displacement
-# spec	Specular
-# norm	Normal
-# roug	Roughness
-# refl	Reflection
-# refr	Refraction
-# frnl	Fresnel
-# mask	Alpha
