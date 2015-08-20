@@ -1,3 +1,5 @@
+
+
 import os
 import subprocess
 
@@ -8,7 +10,7 @@ if __name__ == "__main__":
 
 	os.system("COLOR CF")
 
-	subprocess.call(['C:\Program Files\Nuke8.0v5\Nuke8.0.exe', '-t', cur_folder + '\\nuke_script.py'])
+	subprocess.call(['Z:\RFRENC~1\Outils\COMPOS~1\Nuke8.0v5\NUKE80~1.EXE', '-t', cur_folder + '\\nuke_script.py'])
 
 	os.system("COLOR 2F")
 

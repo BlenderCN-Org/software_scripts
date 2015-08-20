@@ -3,7 +3,6 @@ import os
 import re
 import shutil
 import time
-import modules.mail_notification as mail
 
 def re_render_exr(folder_list, cur_folder):
 	
@@ -70,7 +69,6 @@ def re_render_exr(folder_list, cur_folder):
 		#Remove tmp folder.
 		shutil.rmtree(folder + "/tmp", ignore_errors=True)
 
-		mail.send_email(to_addr_list='t', message=folder)
 		
 
 cur_folder = os.path.dirname(os.path.abspath(__file__))
