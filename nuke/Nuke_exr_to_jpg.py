@@ -2,6 +2,9 @@ import nuke
 
 def exr_split():
 
+
+
+
     #Path for source and where to
     path_for_jpg = "H://Image Test//Nuke Test"
     path_sequence_to_read = "H://Image Test//testEtienne.exr"
