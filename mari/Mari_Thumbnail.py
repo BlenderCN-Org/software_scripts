@@ -1,11 +1,5 @@
 import mari
 import time
-def open_project():
-    mari.projects.open('Cube')
-
-
-
-
 
 def get_thumbnail():
     canvas = mari.canvases.current()
@@ -43,6 +37,4 @@ def get_thumbnail():
         canvas.setDisplayProperty("HUD/RenderHud", True)
 
 
-open_project()
-time.sleep(3)
 get_thumbnail()
