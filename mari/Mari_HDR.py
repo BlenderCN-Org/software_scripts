@@ -25,16 +25,6 @@ class Hdr_Manager(gui.QDialog):
         self.left_group_layout = gui.QGridLayout(self)
         self.left_group.setLayout(self.left_group_layout)
 
-        # Close Layout
-        self.right_group = gui.QGroupBox(self)
-        self.right_group_layout = gui.QVBoxLayout(self)
-        self.right_group.setLayout(self.right_group_layout)
-
-        # Close button
-        close_btn = gui.QPushButton("Close")
-        self.right_group_layout.addWidget(close_btn)
-        close_btn.connect("clicked()", self.reject)
-
         #HDR Combobox
         self.hdr_combobox = gui.QComboBox()
 
@@ -65,7 +55,6 @@ class Hdr_Manager(gui.QDialog):
 
         # Add Layout to main
         main_layout.addWidget(self.left_group)
-        main_layout.addWidget(self.right_group)
 
 
     def applyHDR(self):
