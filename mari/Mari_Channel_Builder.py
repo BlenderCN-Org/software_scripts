@@ -367,5 +367,7 @@ class MariChannelBuilder(gui.QDialog):
 			else:
 				pass
 
+
+
 MainWindow = MariChannelBuilder()
 MainWindow.show()

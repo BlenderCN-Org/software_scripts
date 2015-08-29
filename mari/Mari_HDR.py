@@ -49,15 +49,24 @@ class Hdr_Manager(gui.QDialog):
         self.hdr_combobox.connect("currentIndexChanged(int)", self.change_hdr_pixmap)
 
         #Apply HDR
-        apply_hdr = gui.QPushButton("Apply HDR")
+        apply_hdr = gui.QPushButton("Activate/Apply HDR")
         self.left_group_layout.addWidget(apply_hdr)
         apply_hdr.connect( "clicked()", self.applyHDR)
+
+        #Toggle HDR
+        remove = gui.QPushButton("Remove HDR")
+        self.left_group_layout.addWidget(remove)
+        remove.connect("clicked()", self.remove_hdr)
 
         # Add Layout to main
         main_layout.addWidget(self.left_group)
 
 
     def applyHDR(self):
+        for light in mari.lights.list():
+            if light.isEnvironmentLight() == True:
+                if light.isOn() == False:
+                    light.setOn(1)
         self.selection = self.hdr_combobox.currentText
         self.hdr.setCubeImage(self.hdr_path + "\\" + self.selection + ".hdr", 2)
 
@@ -65,6 +74,12 @@ class Hdr_Manager(gui.QDialog):
         selected_hdr = self.hdr_combobox.currentText
         self.pixmap = gui.QPixmap(self.thumb_path + "\\" + selected_hdr + "_thumb.jpg")
         self.thumb_view.setPixmap(self.pixmap)
+
+    def remove_hdr(self):
+        for light in mari.lights.list():
+            if light.isEnvironmentLight() == True:
+                if light.isOn() == True:
+                    light.setOn(0)
 
 
 MainWindow = Hdr_Manager()
